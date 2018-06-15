@@ -1,0 +1,22 @@
+{
+  "name": "protocal",
+  "version": "0.1.0",
+  "description": "SMTP Protocal lib",
+  "main": "index.js",
+  "scripts": {
+    "test": "xo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RyanBruno/Mail.git"
+  },
+  "author": "RyanBruno",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RyanBruno/Mail/issues"
+  },
+  "homepage": "https://github.com/RyanBruno/Mail#readme",
+  "dependencies": {
+    "xo": "^0.21.1"
+  }
+}
