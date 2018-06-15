@@ -1,46 +1,52 @@
 const lib = require('./../../protocal/index');
 
-const FQDN = 'smtp.rbruno.com';
 
 module.exports.handle = client => {
-    /* Set Encoding */
-    client.setEncoding('ascii');
-    /* Send service ready response */
-    client.write(lib.createReply(220, FQDN + ' Service ready'));
-
-    let session;
-    let data = false;
+    let connection = lib.connection();
+    let mailData = null;
 
     client.on('data', function(data) {
         let command = lib.command(data);
-        
-        if (data) {
+
+        if (mailData) {
             if (data === '.') {
-                
+                session.setData(mailData);
             } else {
+                mailData.push(data) 
             }
         }
 
-        if (command === 'EHLO') {
-            if (command.length() === data.trim().length()) {
-                // Send a error
+        if (command === 'EHLO' || command === 'HELO') {
+            if (command.length() === data.trim().length()) {send
+                client.send('504 Command parameter not implemented');
             } else {
-                session = new lib.session({});
-                session.on('data', () => {
-                    data = true;
-                    // Read data
-                });
-                session.on('reply', (reply) => {
+                session = new lib.session();
+
+                session.on('reply', reply => {
+                    client.send(reply);
                     // Reply 
                 });
-                return;
+                session.on('data', () => {
+                    mailData = [];
+                });
+               return;
             }
+        } else if (command === 'RSET') {
+            session = null;
+            client.send('250 OK');
+        } else if (command === 'NOOP') {
+            client.send('250 OK');
+        } else if (command === 'QUIT') {
+            // QUIT
+        } else if (command === 'VRFY') {
+            // Verify
         }
 
         if (session) {
-            session.command(data);
+            session.command(command, data);
         } else {
-            
+            // Error
+            client.send('500 Command not unrecognized');
         }
     }); 
 };

@@ -2,6 +2,7 @@
 
 const net = require('net');
 const handler = require('./handler');
+const FQDN = 'smtp.rbruno.com';
 
 class Server {
     constructor(port = 25) {
@@ -18,6 +19,12 @@ class Server {
                 console.log('client disconnected');
             });
             console.log(typeof client);
+            /* Set Encoding */
+            client.setEncoding('ascii');
+
+            /* Send service ready response */
+            //client.write(lib.createReply(220, FQDN + ' Service ready'));
+
             /* Handles the client */
             const mail = handler.handle(client);
             /* Phrase the message to be either stored or sent */
