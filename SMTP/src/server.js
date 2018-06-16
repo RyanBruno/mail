@@ -1,7 +1,8 @@
-//const phraser = require('../../phraser/index');
+// const phraser = require('../../phraser/index');
 
 const net = require('net');
-const handler = require('./handler');
+const Handler = require('./handler');
+
 const FQDN = 'smtp.rbruno.com';
 
 class Server {
@@ -23,12 +24,15 @@ class Server {
             client.setEncoding('ascii');
 
             /* Send service ready response */
-            //client.write(lib.createReply(220, FQDN + ' Service ready'));
+            client.write('220 ' + FQDN + ' Service ready\r\n');
 
             /* Handles the client */
-            const mail = handler.handle(client);
+            const handler = Handler.handle(client, buffer => {
+                console.log(JSON.stringify(buffer));
+                // Send response
+            });
             /* Phrase the message to be either stored or sent */
-            //phraser.phrase(mail);
+            // phraser.phrase(mail);
         });
 
         server.on('error', err => {

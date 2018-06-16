@@ -1,10 +1,5 @@
-const Session = require('src/session');
-const mail = require('src/mail');
+const session = require('./src/session');
+const connection = require('./src/connection');
 
-module.exports.Session = session;
-
-module.exports.command = data => {
-    data = data.trim();
-    data = data.split(' ')[0].toUpperCase();
-    return data;
-};
+module.exports.connection = connection;
+module.exports.session = session;

@@ -18,5 +18,8 @@
   "homepage": "https://github.com/RyanBruno/Mail#readme",
   "dependencies": {
     "xo": "^0.21.1"
+  },
+  "xo": {
+    "space": 4
   }
 }

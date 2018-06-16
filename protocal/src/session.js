@@ -1,58 +1,67 @@
 const EventEmitter = require('events');
 
 class Session extends EventEmitter {
-
     command(command, data) {
         if (command === 'MAIL') {
-            session.mail(data);
-        } else if(command === 'RCPT') {
-            session.recipient(data);
-        } else if(command === 'DATA') {
-            session.data(data);
+            this.mail(data);
+        } else if (command === 'RCPT') {
+            this.recipient(data);
+        } else if (command === 'DATA') {
+            this.data(data);
         } else {
             this.emit('reply', '500 Command not unrecognized');
         }
     }
 
     mail(data) {
-        if (!input.toUpperCase().startsWith('MAIL FROM:')) {
-            // Invalid args
-        } else {
+        if (data.toUpperCase().startsWith('MAIL FROM:')) {
             // Check if mailbox exitst
             // Check if reverse-path
-            // return OK
-            let sender = input.substring(10);
-            // Check if buffer
-            this.buffer = { reverse-path: sender, forward-path: [], mail-data: null};
+            const sender = data.substring(10);
+
+            if (this.buffer) {
+                this.emit('reply', '503 Bad sequence of commands');
+            } else {
+                this.buffer = {reversePath: sender, forwardPath: [], mailData: null};
+                this.emit('reply', '250 OK');
+            }
+        } else {
+            this.emit('reply', '504 Command parameter not implemented');
         }
     }
 
     recipient(data) {
-        if (!input.toUpperCase().startsWith('RCPT TO:')) {
-            // Invalid args
+        if (data.toUpperCase().startsWith('RCPT TO:')) {
+            // Validate recipient
+            const recipient = data.substring(8);
+
+            if (this.buffer) {
+                this.buffer.forwardPath.push(recipient);
+                this.emit('reply', '250 OK');
+            } else {
+                this.emit('reply', '503 Bad sequence of commands');
+            }
         } else {
-            // Validate recipient??
-            // return Ok
-            let recipient = input.substring(8);
-            // Check if buffer
-            buffer.forward-path.push(recipient);
+            this.emit('reply', '504 Command parameter not implemented');
         }
     }
 
     data(data) {
-        if (!(input.length === command.length)) {
-            // invalid args                
-        } else {
-            // Check if buffer
+        if (this.buffer && this.buffer.forwardPath.length > 0) {
             this.emit('data');
+            this.emit('reply', '354 Start mail input; end with <CRLF>.<CRLF>');
+        } else {
+            this.emit('reply', '503 Bad sequence of commands');
         }
     }
 
-    setData(data) {
-        if (!buffer) {
-            // Throw error
+    endMail(data) {
+        if (this.buffer) {
+            this.buffer.mailData = data;
+            this.emit('mail', this.buffer);
+            this.buffer = null;
         } else {
-            buffer.mail-data = data;
+            throw new Error('Tried to set mail-data but buffer was not found');
         }
     }
 }
