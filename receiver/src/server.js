@@ -1,4 +1,4 @@
-// const phraser = require('../../phraser/index');
+// Const phraser = require('../../phraser/index');
 
 const net = require('net');
 const Handler = require('./handler');
@@ -16,10 +16,6 @@ class Server {
      */
     listen() {
         const server = net.createServer(client => {
-            client.on('end', () => {
-                console.log('client disconnected');
-            });
-            console.log(typeof client);
             /* Set Encoding */
             client.setEncoding('ascii');
 
@@ -27,12 +23,12 @@ class Server {
             client.write('220 ' + FQDN + ' Service ready\r\n');
 
             /* Handles the client */
-            const handler = Handler.handle(client, buffer => {
+            Handler.handle(client, buffer => {
                 console.log(JSON.stringify(buffer));
-                // Send response
+                /* Phrase the message to be either stored or sent */
+                // phraser.phrase(mail);
+                // send response
             });
-            /* Phrase the message to be either stored or sent */
-            // phraser.phrase(mail);
         });
 
         server.on('error', err => {
@@ -40,7 +36,7 @@ class Server {
         });
 
         server.listen(this.port, () => {
-            console.log('server bound');
+            console.log('Server bound');
         });
     }
 }

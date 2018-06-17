@@ -1,17 +1,40 @@
-const Session = require('./session');
 const EventEmitter = require('events');
+const Session = require('./session');
 
-class Connection extends EventEmitter{
+class Connection extends EventEmitter {
+    constructor(options = {}) {
+        super();
+        this.maxCommand = options.maxCommand || 512;
+        this.maxText = options.maxText || 1000;
+        this.maxMessage = options.maxMessage || 64000;
+        this.maxRecipients = options.maxRecipients || 100;
+    }
+
     data(data) {
-        if (!(this.mailData == null)) {
-            if (data.trim() == '.') {
+        if (this.mailData) {
+            if (data.trim() === '.') {
+                // Check maxMessage
+                // TODO fix
+                if (this.mailData.length >= this.maxMessage) {
+                    this.emit('reply', '552 Too much mail data');
+                    return;
+                }
                 this.session.endMail(this.mailData);
             } else {
+                if (data.length >= this.maxText) {
+                    this.emit('reply', '500 Line too long');
+                    return;
+                }
                 this.mailData.push(data);
             }
             return;
         }
-        
+
+        if (data.length >= this.maxCommand) {
+            this.emit('reply', '500 Line too long');
+            return;
+        }
+
         const command = this.getCommand(data);
         if (!command) {
             this.emit('reply', '500 Command not unrecognized');
@@ -22,7 +45,7 @@ class Connection extends EventEmitter{
             if (command.length === data.trim().length) {
                 this.emit('reply', '504 Command parameter not implemented');
             } else {
-                this.session = new Session();
+                this.session = new Session({maxRecipients: this.Recipients});
 
                 this.session.on('reply', reply => {
                     this.emit('reply', reply);
@@ -32,7 +55,6 @@ class Connection extends EventEmitter{
                 });
                 this.session.on('mail', buffer => {
                     // Validate the mail and sends it
-                    // Send OK
                     this.emit('mail', buffer);
                     this.mailData = null;
                 });
@@ -45,7 +67,7 @@ class Connection extends EventEmitter{
         } else if (command === 'NOOP') {
             this.emit('reply', '250 OK');
         } else if (command === 'QUIT') {
-            // QUIT
+            this.emit('quit');
         } else if (command === 'VRFY') {
             // Verify
         }

@@ -1,6 +1,11 @@
 const EventEmitter = require('events');
 
 class Session extends EventEmitter {
+    constructor(options = {}) {
+        super();
+        this.maxRecipients = options.maxRecipients || 100;
+    }
+
     command(command, data) {
         if (command === 'MAIL') {
             this.mail(data);
@@ -31,6 +36,10 @@ class Session extends EventEmitter {
     }
 
     recipient(data) {
+        if (this.buffer.length >= this.maxRecipients) {
+            this.emit('reply', '452 Too many recipients');
+            return;
+        }
         if (data.toUpperCase().startsWith('RCPT TO:')) {
             // Validate recipient
             const recipient = data.substring(8);
@@ -46,7 +55,7 @@ class Session extends EventEmitter {
         }
     }
 
-    data(data) {
+    data() {
         if (this.buffer && this.buffer.forwardPath.length > 0) {
             this.emit('data');
             this.emit('reply', '354 Start mail input; end with <CRLF>.<CRLF>');
