@@ -1,18 +1,37 @@
+const spamFilter = require('../spam-filter/index');
+const Queue = require('../queue/index');
 
-/* {"reversePath":"<ryan@rbruno.com>","forwardPath":["<test@gmail.com>"],"mailData":["TEST"]} */
 module.exports.parse = (buffer, config, callback) => {
     /* Parse and validate mail headers */
     const mail = format(buffer);
-    // Parse buffer into mail object
-    callback(250);
 
-    mail.to.forEach(address => {
-        if (config.domain.conatins(address.domain)) {
-            // To Spam filter
+    /* Respond to the client */
+    const response = validate(mail);
+    callback(response);
+    console.log(mail);
+    if (response !== 250) {
+        return;
+    }
+
+    const save = mail;
+    const send = mail;
+    save.to = [];
+    send.to = [];
+    let address;
+    while ((address = mail.to.pop())) {
+        if (config.domain.includes(address.domain)) {
+            save.to.push(address);
         } else {
-            // To Securty => Mail queue
+            send.to.push(address);
         }
-    });
+    }
+
+    if (save.to.length > 0) {
+        spamFilter(mail);
+    }
+    if (send.to.length > 0) {
+        Queue.queue(mail);
+    }
 };
 
 function format(buffer) {
@@ -39,14 +58,29 @@ function format(buffer) {
         to = to.split('@');
         mail.to.push({local: to[0], domain: to[1]});
     });
-    mail.mail = buffer.messageData;
+    mail.mail = buffer.mailData;
     mail.timestamp = buffer.timestamp;
     return mail;
+}
+
+function validate(mail) {
+    if (mail.from.local.length <= 0 && mail.from.domain.length <= 0) {
+        return 451;
+    }
+    if (mail.to.length <= 0) {
+        return 451;
+    }
+    mail.to.forEach(recipient => {
+        if (recipient.local.length <= 0 && recipient.domain.length <= 0) {
+            return 554;
+        }
+    });
+    return 250;
 }
 /* {
  *  from: {local: 'ryan', domain: 'rbruno.com'},
  *  to:[{local: 'test', domain: 'gmail.com'}],
- *  mail: {TODO},
+ *  mail: [line, line],
  *  timestamp: 3245461324634
  * }
  */

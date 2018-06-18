@@ -29,10 +29,10 @@ class Server extends EventHandler {
             client.write('220 ' + this.config.FQDN + ' Service ready\r\n');
 
             /* Handles the client */
-            Handler.handle(client, config, buffer => {
+            Handler.handle(client, this.config, buffer => {
                 console.log(JSON.stringify(buffer));
                 /* Phrase the message to be either stored or sent */
-                Parser.parse(buffer, config, response => {
+                Parser.parse(buffer, this.config, response => {
                     if (response === 250) {
                         client.write('250 OK\r\n');
                     }

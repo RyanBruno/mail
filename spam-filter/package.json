@@ -1,0 +1,22 @@
+{
+  "name": "spam-filter",
+  "version": "0.1.0",
+  "description": "Trys to identify and mark mail as spam.",
+  "main": "index.js",
+  "scripts": {
+    "test": "xo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RyanBruno/mail.git"
+  },
+  "author": "RyanBruno",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RyanBruno/mail/issues"
+  },
+  "homepage": "https://github.com/RyanBruno/mail#readme",
+  "dependencies": {
+    "xo": "^0.21.1"
+  }
+}
