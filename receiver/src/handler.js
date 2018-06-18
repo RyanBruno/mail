@@ -1,6 +1,6 @@
 const lib = require('./../../protocal/index');
 
-module.exports.handle = (client, callback) => {
+module.exports.handle = (client, config, callback) => {
     const connection = new lib.Connection();
 
     connection.on('reply', data => {
@@ -15,7 +15,7 @@ module.exports.handle = (client, callback) => {
 
     connection.on('quit', () => {
         // TODO FQDN
-        client.end('reply', '221 smtp.rbruno.com Service closing transmission channel');
+        client.end('221 ' + config.FQDN + ' Service closing transmission channel');
     });
 
     client.on('data', data => {
@@ -26,6 +26,6 @@ module.exports.handle = (client, callback) => {
     });
 
     client.on('end', () => {
-        console.log('client disconnected');
+        console.log('Client disconnected');
     });
 };

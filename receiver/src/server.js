@@ -1,14 +1,20 @@
-// Const phraser = require('../../phraser/index');
-
 const net = require('net');
+const fs = require('fs');
+const EventHandler = require('events');
+const Parser = require('../../parser/index');
 const Handler = require('./handler');
 
-const FQDN = 'smtp.rbruno.com';
-
-class Server {
-    constructor(port = 25) {
-        this.port = port;
-        this.listen();
+class Server extends EventHandler {
+    constructor() {
+        super();
+        fs.readFile('config.json', (err, data) => {
+            if (err) {
+                throw err;
+            }
+            this.config = JSON.parse(data);
+            console.log(this.config);
+            this.listen();
+        });
     }
 
     /**
@@ -20,14 +26,17 @@ class Server {
             client.setEncoding('ascii');
 
             /* Send service ready response */
-            client.write('220 ' + FQDN + ' Service ready\r\n');
+            client.write('220 ' + this.config.FQDN + ' Service ready\r\n');
 
             /* Handles the client */
-            Handler.handle(client, buffer => {
+            Handler.handle(client, config, buffer => {
                 console.log(JSON.stringify(buffer));
                 /* Phrase the message to be either stored or sent */
-                // phraser.phrase(mail);
-                // send response
+                Parser.parse(buffer, config, response => {
+                    if (response === 250) {
+                        client.write('250 OK\r\n');
+                    }
+                });
             });
         });
 
@@ -35,8 +44,9 @@ class Server {
             throw err;
         });
 
-        server.listen(this.port, () => {
-            console.log('Server bound');
+        server.listen(this.config.port, () => {
+            console.log('Server bound to port: ' + this.config.port);
+            this.emit('ready');
         });
     }
 }

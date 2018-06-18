@@ -20,8 +20,7 @@ class Session extends EventEmitter {
 
     mail(data) {
         if (data.toUpperCase().startsWith('MAIL FROM:')) {
-            // Check if mailbox exitst
-            // Check if reverse-path
+            // TODO Check if mailbox exitst
             const sender = data.substring(10);
 
             if (this.buffer) {
@@ -41,7 +40,7 @@ class Session extends EventEmitter {
             return;
         }
         if (data.toUpperCase().startsWith('RCPT TO:')) {
-            // Validate recipient
+            // TODO Validate recipient
             const recipient = data.substring(8);
 
             if (this.buffer) {

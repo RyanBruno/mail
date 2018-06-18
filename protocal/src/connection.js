@@ -54,12 +54,11 @@ class Connection extends EventEmitter {
                     this.mailData = [];
                 });
                 this.session.on('mail', buffer => {
-                    // Validate the mail and sends it
+                    buffer.timestamp = Date.now();
                     this.emit('mail', buffer);
                     this.mailData = null;
                 });
                 this.emit('reply', '250 OK');
-                return;
             }
         } else if (command === 'RSET') {
             this.session = null;
@@ -69,10 +68,8 @@ class Connection extends EventEmitter {
         } else if (command === 'QUIT') {
             this.emit('quit');
         } else if (command === 'VRFY') {
-            // Verify
-        }
-
-        if (this.session) {
+            // TODO Verify
+        } else if (this.session) {
             this.session.command(command, data);
         } else {
             this.emit('reply', '503 Bad sequence of commands');
