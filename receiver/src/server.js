@@ -33,8 +33,17 @@ class Server extends EventHandler {
                 console.log(JSON.stringify(buffer));
                 /* Phrase the message to be either stored or sent */
                 Parser.parse(buffer, this.config, response => {
-                    if (response === 250) {
-                        client.write('250 OK\r\n');
+                    switch (response) {
+                        case 250:
+                            client.write('250 OK\r\n');
+                            break;
+                        case 554:
+                            client.write('554 Transaction failed');
+                            break;
+                        case 451:
+                        default:
+                            client.wrire('451 Local error in processing');
+                            break;
                     }
                 });
             });
