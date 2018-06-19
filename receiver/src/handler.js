@@ -1,7 +1,7 @@
 const lib = require('./../../protocal/index');
 
 module.exports.handle = (client, config, callback) => {
-    const connection = new lib.Connection();
+    const connection = new lib.Connection(config);
 
     connection.on('reply', data => {
         client.write(data + '\r\n');

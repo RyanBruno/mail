@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/RyanBruno/Mail#readme",
   "dependencies": {
+    "nodemailer": "^4.6.7",
     "xo": "^0.21.1"
   },
   "xo": {

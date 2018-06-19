@@ -45,7 +45,7 @@ class Connection extends EventEmitter {
             if (command.length === data.trim().length) {
                 this.emit('reply', '504 Command parameter not implemented');
             } else {
-                this.session = new Session({maxRecipients: this.Recipients});
+                this.session = new Session({maxRecipients: this.maxRecipients});
 
                 this.session.on('reply', reply => {
                     this.emit('reply', reply);

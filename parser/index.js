@@ -37,6 +37,8 @@ module.exports.parse = (buffer, config, callback) => {
 
 function format(buffer) {
     const mail = {};
+
+    /* Formath the reverse-path address */
     let from = buffer.reversePath.replace('<', '').replace('>', '');
     if (from.indexOf(':') >= 0) {
         from = from.split(':')[1];
@@ -47,6 +49,7 @@ function format(buffer) {
     from = from.split('@');
     mail.from = {local: from[0], domain: from[1]};
 
+    /* Format the forward-path addresses */
     mail.to = [];
     buffer.forwardPath.forEach(to => {
         to = to.replace('<', '').replace('>', '');
@@ -61,6 +64,19 @@ function format(buffer) {
     });
     mail.mail = buffer.mailData;
     mail.timestamp = buffer.timestamp;
+
+    /* Find and format the message-id */
+    for (let i = 0; i < mail.mail.length; i++) {
+        if (mail.mail[i].toUppercase().startsWith('MESSAGE-ID') {
+            mail.messageID = mail.mail[i].substring(10).trim();
+            break;
+        }
+    }
+
+    if (!mail.messageID) {
+        // TODO Make a messageID
+    }
+
     return mail;
 }
 
