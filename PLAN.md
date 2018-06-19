@@ -1,5 +1,5 @@
 To make a simple yet robust Mail Exchange Server for personal use.
-Language: ???
+Language: Node.js
 
 /-----------------\         /------------------\        /-----------------\ 
 | Mail Reciver    |---------| Auth Lib         |--------| SMTP LIB        |

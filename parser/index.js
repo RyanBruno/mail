@@ -1,5 +1,5 @@
 const spamFilter = require('../spam-filter/index');
-const Queue = require('../queue/index');
+const Sender = require('../sender/index');
 
 module.exports.parse = (buffer, config, callback) => {
     /* Parse and validate mail headers */
@@ -13,12 +13,13 @@ module.exports.parse = (buffer, config, callback) => {
         return;
     }
 
-    const save = mail;
-    const send = mail;
+    const save = Object.assign({}, mail);
+    const send = Object.assign({}, mail);
     save.to = [];
     send.to = [];
     let address;
-    while ((address = mail.to.pop())) {
+    while (mail.to.length > 0) {
+        address = mail.to.pop();
         if (config.domain.includes(address.domain)) {
             save.to.push(address);
         } else {
@@ -27,10 +28,10 @@ module.exports.parse = (buffer, config, callback) => {
     }
 
     if (save.to.length > 0) {
-        spamFilter(mail);
+        spamFilter(save);
     }
     if (send.to.length > 0) {
-        Queue.queue(mail);
+        Sender.send(send);
     }
 };
 
