@@ -5,7 +5,6 @@ module.exports.handle = (client, config, callback) => {
 
     connection.on('reply', data => {
         client.write(data + '\r\n');
-        // TODO log
     });
 
     connection.on('mail', buffer => {

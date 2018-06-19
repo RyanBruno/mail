@@ -8,11 +8,12 @@ module.exports.parse = (buffer, config, callback) => {
     /* Respond to the client */
     const response = validate(mail);
     callback(response);
-    console.log(mail);
     if (response !== 250) {
+        console.error(Date.now() + ' Invalid email (' + mail.messageID + ') was rejected with code ' + response);
         return;
     }
 
+    console.log(Date.now() + ' Email (' + mail.messageID + ') accepted with code ');
     const save = Object.assign({}, mail);
     const send = Object.assign({}, mail);
     save.to = [];
@@ -67,7 +68,7 @@ function format(buffer) {
 
     /* Find and format the message-id */
     for (let i = 0; i < mail.mail.length; i++) {
-        if (mail.mail[i].toUppercase().startsWith('MESSAGE-ID') {
+        if (mail.mail[i].toUppercase().startsWith('MESSAGE-ID')) {
             mail.messageID = mail.mail[i].substring(10).trim();
             break;
         }

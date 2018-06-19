@@ -12,6 +12,7 @@ class Server extends EventHandler {
                 throw err;
             }
             this.config = JSON.parse(data);
+            process.stdout.write('Config: ');
             console.log(this.config);
             this.listen();
         });
@@ -30,7 +31,6 @@ class Server extends EventHandler {
 
             /* Handles the client */
             Handler.handle(client, this.config, buffer => {
-                console.log(JSON.stringify(buffer));
                 /* Phrase the message to be either stored or sent */
                 Parser.parse(buffer, this.config, response => {
                     switch (response) {
@@ -38,11 +38,11 @@ class Server extends EventHandler {
                             client.write('250 OK\r\n');
                             break;
                         case 554:
-                            client.write('554 Transaction failed');
+                            client.write('554 Transaction failed\r\n');
                             break;
                         case 451:
                         default:
-                            client.wrire('451 Local error in processing');
+                            client.wrire('451 Local error in processing\r\n');
                             break;
                     }
                 });
@@ -53,7 +53,7 @@ class Server extends EventHandler {
             throw err;
         });
 
-        server.listen(this.config.port, () => {
+        server.listen(this.config.port || 25, () => {
             console.log('Server bound to port: ' + this.config.port);
             this.emit('ready');
         });
