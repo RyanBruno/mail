@@ -1,6 +1,7 @@
 To make a simple yet robust Mail Exchange Server for personal use.
 Language: Node.js
 
+```
 /-----------------\         /------------------\        /-----------------\ 
 | Mail Reciver    |---------| Auth Lib         |--------| SMTP LIB        |
 \-----------------/         \------------------/        \-----------------/
@@ -24,4 +25,4 @@ Language: Node.js
 /-------------------\
 | Mail Storage      |
 \-------------------/
-
+```
