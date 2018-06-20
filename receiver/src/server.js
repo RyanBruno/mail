@@ -5,15 +5,22 @@ const Parser = require('../../parser/index');
 const Handler = require('./handler');
 
 class Server extends EventHandler {
+    /**
+     * Read the config file and starts the server.
+     */
     constructor() {
         super();
+        /* Reads the config file */
         fs.readFile('config.json', (err, data) => {
             if (err) {
                 throw err;
             }
+            /* Parse and log config */
             this.config = JSON.parse(data);
             process.stdout.write('Config: ');
             console.log(this.config);
+
+            /* Start the server */
             this.listen();
         });
     }
@@ -33,6 +40,7 @@ class Server extends EventHandler {
             Handler.handle(client, this.config, buffer => {
                 /* Phrase the message to be either stored or sent */
                 Parser.parse(buffer, this.config, response => {
+                    /* Send a response to the client */
                     switch (response) {
                         case 250:
                             client.write('250 OK\r\n');
@@ -50,6 +58,7 @@ class Server extends EventHandler {
         });
 
         server.on('error', err => {
+            console.error(Date.now() + ' An error has occured with the server socket');
             throw err;
         });
 
