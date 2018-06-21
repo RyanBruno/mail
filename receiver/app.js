@@ -1,11 +1,11 @@
 const nodemailer = require('nodemailer');
 const Server = require('./index');
 
-const server = new Server();
+//const server = new Server();
 
 /* Testing */
 
-server.on('ready', () => {
+Server.on('ready', () => {
     for (let i = 0; i < 1; i++) {
         // Create reusable transporter object using the default SMTP transport
         const transporter = nodemailer.createTransport({

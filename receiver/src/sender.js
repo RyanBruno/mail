@@ -2,9 +2,10 @@ const net = require('net');
 const dns = require('dns');
 
 module.exports.send = (mail, config) => {
-    dns.lookupMx(mail.domain, (err, addresses) => {
+    dns.resolveMx(mail.domain, (err, addresses) => {
         if (err) {
             // TODO Return to sender
+            console.log(Date.now() + ' Failed to resolve ' + mail.domain + ' for mail ' + mail.messageID);
             return;
         }
         const fqdn = addresses[0].exchange;

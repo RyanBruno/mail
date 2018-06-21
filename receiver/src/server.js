@@ -6,21 +6,15 @@ const Handler = require('./handler');
 
 class Server extends EventHandler {
     /**
-     * Read the config file and starts the server.
+     * Starts the server.
      */
-    constructor() {
+    constructor(config) {
         super();
-        /* Reads the config file */
-        fs.readFile('config.json', (err, data) => {
-            if (err) {
-                throw err;
-            }
-            /* Parse and log config */
-            this.config = JSON.parse(data);
-
-            /* Start the server */
-            this.listen();
-        });
+        /* Saves config */
+        this.config = config;
+        
+        /* Start the server */
+        this.listen();
     }
 
     /**
