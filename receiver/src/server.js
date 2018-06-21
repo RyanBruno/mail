@@ -1,7 +1,7 @@
 const net = require('net');
 const fs = require('fs');
 const EventHandler = require('events');
-const Parser = require('../../parser/index');
+const Parser = require('./parser');
 const Handler = require('./handler');
 
 class Server extends EventHandler {
@@ -17,8 +17,6 @@ class Server extends EventHandler {
             }
             /* Parse and log config */
             this.config = JSON.parse(data);
-            process.stdout.write('Config: ');
-            console.log(this.config);
 
             /* Start the server */
             this.listen();

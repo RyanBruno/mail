@@ -20,7 +20,6 @@ class Session extends EventEmitter {
 
     mail(data) {
         if (data.toUpperCase().startsWith('MAIL FROM:')) {
-            // TODO Check if mailbox exitst
             const sender = data.substring(10);
 
             if (this.buffer) {

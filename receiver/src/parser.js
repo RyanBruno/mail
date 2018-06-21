@@ -1,5 +1,5 @@
-const spamFilter = require('../spam-filter/index');
-const Sender = require('../sender/index');
+const spamFilter = require('../../spam-filter/index');
+const Queue = require('./queue');
 
 module.exports.parse = (buffer, config, callback) => {
     /* Parse and validate mail headers */
@@ -13,7 +13,7 @@ module.exports.parse = (buffer, config, callback) => {
         return;
     }
 
-    console.log(Date.now() + ' Email (' + mail.messageID + ') accepted with code ');
+    console.log(Date.now() + ' Email (' + mail.messageID + ') accepted with code ' + response);
     const save = Object.assign({}, mail);
     const send = Object.assign({}, mail);
     save.to = [];
@@ -29,10 +29,10 @@ module.exports.parse = (buffer, config, callback) => {
     }
 
     if (save.to.length > 0) {
-        spamFilter(save);
+        spamFilter(save, config);
     }
     if (send.to.length > 0) {
-        Sender.send(send);
+        Queue.queue(send, config);
     }
 };
 
@@ -68,8 +68,8 @@ function format(buffer) {
 
     /* Find and format the message-id */
     for (let i = 0; i < mail.mail.length; i++) {
-        if (mail.mail[i].toUppercase().startsWith('MESSAGE-ID')) {
-            mail.messageID = mail.mail[i].substring(10).trim();
+        if (mail.mail[i].toUpperCase().startsWith('MESSAGE-ID:')) {
+            mail.messageID = mail.mail[i].substring(11).trim();
             break;
         }
     }

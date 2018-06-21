@@ -7,6 +7,8 @@ A simple yet robust mail transfer agent.
 - [ ] Protocal: Max message
 - [ ] Protocal: Validate recipient
 - [ ] Protocal: Mailing lists?
+- [ ] Spam Filter
 - [ ] Auth Lib
 - [ ] Project name
 - [ ] Sender
+- [ ] IMAP/POP
