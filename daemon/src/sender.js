@@ -1,7 +1,7 @@
 const net = require('net');
 const dns = require('dns');
 
-module.exports.send = (mail, config) => {
+module.exports.send = mail => {
     dns.resolveMx(mail.domain, (err, addresses) => {
         if (err) {
             // TODO Return to sender

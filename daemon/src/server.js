@@ -5,14 +5,14 @@ const Parser = require('./parser');
 const Handler = require('./handler');
 
 class Server extends EventHandler {
-    /**
+    /*
      * Starts the server.
      */
     constructor(config) {
         super();
         /* Saves config */
         this.config = config;
-        
+
         /* Start the server */
         this.listen();
     }
