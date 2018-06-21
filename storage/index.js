@@ -7,7 +7,7 @@ const fs = require('fs');
 
 module.exports.store = (mail, config) => {
     console.log('Stored: ' + JSON.stringify(mail));
-    const mailDir = config.mailDir.endsWith('/') ? config.mailDir : config.mailDir + '/';
+    /*const mailDir = config.mailDir.endsWith('/') ? config.mailDir : config.mailDir + '/';
     mail.to.forEach(address => {
         const file = mailDir + address.local + '/' + mail.messageID + '.email';
         if (fs.existsSync(file)) {
@@ -18,7 +18,7 @@ module.exports.store = (mail, config) => {
                 console.log(Date.now() + ' Stored (' + mail.messageID + ') in file ' + file);
             });
         } else {
-            console.err(Date.now() + ' Mail (' + mail.messageID + ') already exists');
+            console.error(Date.now() + ' Mail (' + mail.messageID + ') already exists');
         }
-    });
+    });*/
 };

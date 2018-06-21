@@ -1,5 +1,5 @@
 const spamFilter = require('../../spam-filter/index');
-const Queue = require('./queue');
+const Sender = require('./sender');
 
 module.exports.parse = (buffer, config, callback) => {
     /* Parse and validate mail headers */
@@ -14,33 +14,54 @@ module.exports.parse = (buffer, config, callback) => {
     }
 
     console.log(Date.now() + ' Email (' + mail.messageID + ') accepted with code ' + response);
-    const save = Object.assign({}, mail);
-    const send = Object.assign({}, mail);
-    save.to = [];
-    send.to = [];
-    let address;
-    while (mail.to.length > 0) {
-        address = mail.to.pop();
-        if (config.domain.includes(address.domain)) {
-            save.to.push(address);
-        } else {
-            send.to.push(address);
-        }
-    }
 
+    /* Filter out local mail */
+    const save = Object.assign({}, mail);
+    save.to = save.to.filter(recipient => {
+        if (config.domain.includes(recipient.domain)) {
+            return true;
+        }
+        return false;
+    });
+
+    /* If there is any local mail send to spam filter */
     if (save.to.length > 0) {
         spamFilter(save, config);
     }
-    if (send.to.length > 0) {
-        Queue.queue(send, config);
-    }
+
+    /* Get a list of all to hosts */
+    const hosts = [];
+    mail.to.forEach(to => {
+        if (!hosts.includes(to.domain) && !(to.domain === config.FQDN)) {
+            hosts.push(to.domain);
+        }
+    });
+
+    /* Break up to mail into diffrent hosts */
+    hosts.forEach(host => {
+        const newMail = Object.assign({domain: host}, mail);
+        newMail.to = mail.to.filter(recipient => {
+            if (recipient.domain === host) {
+                return true;
+            }
+            return false;
+        });
+
+        Sender.send(newMail, config);
+    });
 };
 
 function format(buffer) {
     const mail = {};
 
     /* Formath the reverse-path address */
-    let from = buffer.reversePath.replace('<', '').replace('>', '');
+    if (buffer.reversePath.indexOf('<') === -1) {
+        buffer.reversePath = '<' + buffer.reversePath;
+    }
+    if (buffer.reversePath.indexOf('>') === -1) {
+        buffer.reversePath += '>';
+    }
+    let from = buffer.reversePath.split('<')[1].split('>')[0];
     if (from.indexOf(':') >= 0) {
         from = from.split(':')[1];
     }
@@ -53,7 +74,13 @@ function format(buffer) {
     /* Format the forward-path addresses */
     mail.to = [];
     buffer.forwardPath.forEach(to => {
-        to = to.replace('<', '').replace('>', '');
+        if (to.indexOf('<') === -1) {
+            to = '<' + to;
+        }
+        if (to.indexOf('>') === -1) {
+            to += '>';
+        }
+        to = to.split('<')[1].split('>')[0];
         if (to.indexOf(':') >= 0) {
             to = to.split(':')[1];
         }

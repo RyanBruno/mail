@@ -4,6 +4,7 @@
     "domain": ["rbruno.com"],
     "mailbox": ["ryan"],
     "mailDir": "/var/mail",
+    "queueSocket": "/tmp/mailQueue.sock",
     "maxCommand": 512,
     "maxText": 1000,
     "maxMessage": 64000,

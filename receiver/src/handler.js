@@ -1,14 +1,14 @@
-const lib = require('./../../protocal/index');
+const Connection = require('./lib/connection');
 
 module.exports.handle = (client, config, callback) => {
-    const connection = new lib.Connection(config);
+    const connection = new Connection(config);
 
     connection.on('reply', data => {
         client.write(data + '\r\n');
     });
 
     connection.on('mail', buffer => {
-        /* Check mail then emit */
+        /* Callback new mail */
         callback(buffer);
     });
 

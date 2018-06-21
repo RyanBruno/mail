@@ -61,7 +61,7 @@ class Server extends EventHandler {
         });
 
         server.listen(this.config.port || 25, () => {
-            console.log('Server bound to port: ' + this.config.port);
+            console.log(Date.now() + ' Server bound to port: ' + this.config.port);
             this.emit('ready');
         });
     }
