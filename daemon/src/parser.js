@@ -1,5 +1,5 @@
-const spamFilter = require('../../spam-filter/index');
 const Sender = require('./sender');
+const Storage = require('./storage');
 
 module.exports.parse = (buffer, config, callback) => {
     /* Parse and validate mail headers */
@@ -26,7 +26,11 @@ module.exports.parse = (buffer, config, callback) => {
 
     /* If there is any local mail send to spam filter */
     if (save.to.length > 0) {
-        spamFilter(save, config);
+        if (config.spamFilter) {
+            config.spamFilter(save, config);
+        } else {
+            Storage.store(save, config);
+        }
     }
 
     /* Get a list of all to hosts */

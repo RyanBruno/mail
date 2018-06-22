@@ -1,4 +1,4 @@
-const Storage = require('../reciver/storage');
+const Storage = require('../daemon/src/storage');
 
 module.exports = (mail, config) => {
     // TODO Spam filter

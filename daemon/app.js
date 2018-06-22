@@ -17,7 +17,7 @@ Server.on('ready', () => {
         // Setup email data with unicode symbols
         const mailOptions = {
             from: '"Fred Foo 👻" <foo@example.com>', // Sender address
-            to: 'bar@example.com, baz@bananas.com', // List of receivers
+            to: 'bar@rbruno.com'/*, baz@bananas.com'*/, // List of receivers
             subject: 'Hello ' + i, // Subject line
             text: 'Hello world?', // Plain text body
             html: '<b>Hello world?</b>' // Html body

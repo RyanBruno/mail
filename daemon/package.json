@@ -17,11 +17,13 @@
     "url": "https://github.com/RyanBruno/Mail/issues"
   },
   "homepage": "https://github.com/RyanBruno/Mail#readme",
-  "dependencies": {
-    "nodemailer": "^4.6.7",
+  "devDependencies": {
     "xo": "^0.21.1"
   },
   "xo": {
     "space": 4
+  },
+  "dependencies": {
+    "nodemailer": "^4.6.7"
   }
 }

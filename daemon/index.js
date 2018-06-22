@@ -1,3 +1,4 @@
+const spamFilter = require('../spam-filter/index');
 const Server = require('./src/server');
 
 module.exports = new Server({
@@ -9,5 +10,6 @@ module.exports = new Server({
     maxCommand: 512,
     maxText: 1000,
     maxMessage: 64000,
-    maxRecipients: 100
+    maxRecipients: 100,
+    spamFilter
 });

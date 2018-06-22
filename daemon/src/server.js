@@ -1,5 +1,4 @@
 const net = require('net');
-const fs = require('fs');
 const EventHandler = require('events');
 const Parser = require('./parser');
 const Handler = require('./handler');
