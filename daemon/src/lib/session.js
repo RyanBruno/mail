@@ -39,7 +39,6 @@ class Session extends EventEmitter {
             return;
         }
         if (data.toUpperCase().startsWith('RCPT TO:')) {
-            // TODO Validate recipient
             const recipient = data.substring(8);
 
             if (this.buffer) {

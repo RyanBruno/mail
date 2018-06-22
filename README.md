@@ -3,12 +3,11 @@ A simple yet robust mail transfer agent.
 
 ### TODO
 - [ ] Parser: Generate UID if not present
-- [ ] Protocal: Verify Command
-- [ ] Protocal: Max message
-- [ ] Protocal: Validate recipient
+- [x] Protocal: Verify Command
+- [x] Protocal: Max message
 - [ ] Protocal: Mailing lists?
 - [ ] Spam Filter
 - [ ] Auth Lib
 - [ ] Project name
-- [ ] Sender
+- [x] Sender
 - [ ] IMAP/POP

@@ -8,14 +8,14 @@ class Connection extends EventEmitter {
         this.maxText = options.maxText || 1000;
         this.maxMessage = options.maxMessage || 64000;
         this.maxRecipients = options.maxRecipients || 100;
+        this.mailbox = options.mailbox || [];
     }
 
     data(data) {
         if (this.mailData) {
             if (data.trim() === '.') {
                 // Check maxMessage
-                // TODO fix
-                if (this.mailData.length >= this.maxMessage) {
+                if (this.mailData.join().length >= this.maxMessage) {
                     this.emit('reply', '552 Too much mail data');
                     return;
                 }
@@ -23,6 +23,9 @@ class Connection extends EventEmitter {
             } else {
                 if (data.length >= this.maxText) {
                     this.emit('reply', '500 Line too long');
+                    return;
+                }
+                if (this.mailData.join().length >= this.maxMessage) {
                     return;
                 }
                 this.mailData.push(data);
@@ -68,7 +71,31 @@ class Connection extends EventEmitter {
         } else if (command === 'QUIT') {
             this.emit('quit');
         } else if (command === 'VRFY') {
-            // TODO Verify
+            let query = data.substring(4).trim();
+
+            /* Format query */
+            if (query.indexOf('<') === -1) {
+                query = '<' + query;
+            }
+            if (query.indexOf('>') === -1) {
+                query += '>';
+            }
+
+            query = query.split('<')[1].split('>')[0];
+            if (query.indexOf(':') >= 0) {
+                query = query.split(':')[1];
+            }
+            if (query.indexOf('@') === -1) {
+                query += '@';
+            }
+            query = query.split('@');
+
+            /* Check query */
+            if (this.mailbox.includes(query.local)) {
+                this.emit('reply', '250 OK');
+            } else {
+                this.emit('reply', '553 User ambiguous');
+            }
         } else if (this.session) {
             this.session.command(command, data);
         } else {
