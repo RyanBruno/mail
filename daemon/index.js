@@ -6,7 +6,7 @@ module.exports = new Server({
     FQDN: 'smtp.rbruno.com',
     domain: ['rbruno.com'],
     mailbox: ['ryan'],
-    mailDir: '/var/mail',
+    mailDir: '/tmp/mail',
     maxCommand: 512,
     maxText: 1000,
     maxMessage: 64000,

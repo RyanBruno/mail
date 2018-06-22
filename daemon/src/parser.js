@@ -36,7 +36,7 @@ module.exports.parse = (buffer, config, callback) => {
     /* Get a list of all to hosts */
     const hosts = [];
     mail.to.forEach(to => {
-        if (!hosts.includes(to.domain) && !(to.domain === config.FQDN)) {
+        if (!hosts.includes(to.domain) && !(config.domain.includes(to.domain))) {
             hosts.push(to.domain);
         }
     });
