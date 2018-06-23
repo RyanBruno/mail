@@ -1,4 +1,4 @@
-const spamFilter = require('../spam-filter/index');
+const spamFilter = require('./src/spam-filter');
 const Server = require('./src/server');
 
 module.exports = new Server({

@@ -6,7 +6,10 @@
 const fs = require('fs');
 
 module.exports.store = (mail, config) => {
-    const mailDir = config.mailDir.endsWith('/') ? config.mailDir : config.mailDir + '/';
+
+    console.log(mail);
+
+    /* const mailDir = config.mailDir.endsWith('/') ? config.mailDir : config.mailDir + '/';
     mail.to.forEach(address => {
         const file = mailDir + address.local + '/' + mail.messageID + '.email';
         fs.access(file, fs.constants.F_OK, err => {
@@ -21,5 +24,5 @@ module.exports.store = (mail, config) => {
                 console.error(Date.now() + ' Mail (' + mail.messageID + ') already exists');
             }
         });
-    });
+    }); */
 };
