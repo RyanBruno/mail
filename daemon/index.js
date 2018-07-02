@@ -2,7 +2,7 @@ const spamFilter = require('./src/spam-filter');
 const Server = require('./src/server');
 
 module.exports = new Server({
-    port: 25565,
+    port: 25,
     FQDN: 'smtp.rbruno.com',
     domain: ['rbruno.com'],
     mailbox: ['ryan'],
