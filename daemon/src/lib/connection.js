@@ -14,7 +14,7 @@ class Connection extends EventEmitter {
     data(data) {
         if (this.mailData) {
             if (data.trim() === '.') {
-                // Check maxMessage
+                /* Check message length */
                 if (this.mailData.join().length >= this.maxMessage) {
                     this.emit('reply', '552 Too much mail data');
                     return;
@@ -71,31 +71,7 @@ class Connection extends EventEmitter {
         } else if (command === 'QUIT') {
             this.emit('quit');
         } else if (command === 'VRFY') {
-            let query = data.substring(4).trim();
-
-            /* Format query */
-            if (query.indexOf('<') === -1) {
-                query = '<' + query;
-            }
-            if (query.indexOf('>') === -1) {
-                query += '>';
-            }
-
-            query = query.split('<')[1].split('>')[0];
-            if (query.indexOf(':') >= 0) {
-                query = query.split(':')[1];
-            }
-            if (query.indexOf('@') === -1) {
-                query += '@';
-            }
-            query = query.split('@');
-
-            /* Check query */
-            if (this.mailbox.includes(query.local)) {
-                this.emit('reply', '250 OK');
-            } else {
-                this.emit('reply', '553 User ambiguous');
-            }
+            this.emit('reply', '553 User ambiguous');
         } else if (this.session) {
             this.session.command(command, data);
         } else {

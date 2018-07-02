@@ -23,8 +23,4 @@ module.exports.handle = (client, config, callback) => {
             connection.data(line);
         });
     });
-
-    client.on('end', () => {
-        // TODO End
-    });
 };

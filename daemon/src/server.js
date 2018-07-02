@@ -1,4 +1,5 @@
 const net = require('net');
+const fs = require('fs');
 const EventHandler = require('events');
 const Parser = require('./parser');
 const Handler = require('./handler');
@@ -13,7 +14,9 @@ class Server extends EventHandler {
         this.config = config;
 
         /* Start the server */
-        this.listen();
+        fs.mkdir(this.config.mailDir, () => {
+            this.listen();
+        });
     }
 
     /**

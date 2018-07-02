@@ -11,3 +11,4 @@ A simple yet robust mail transfer agent.
 - [ ] Project name
 - [x] Sender
 - [ ] IMAP/POP
+- [ ] Comments

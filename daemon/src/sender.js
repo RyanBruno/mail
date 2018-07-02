@@ -11,8 +11,7 @@ module.exports.send = mail => {
         const fqdn = addresses[0].exchange;
 
         const client = new net.Socket();
-        const commands = ['DATA', 'RCPT TO:<test@gmail.com>',
-            'MAIL FROM:<' + mail.local + '@' + mail.domain + '>', 'EHLO ' + fqdn];
+        const commands = ['DATA', 'MAIL FROM:<' + mail.from.local + '@' + mail.from.domain + '>', 'EHLO ' + fqdn];
 
         client.connect(25, fqdn);
 
