@@ -1,8 +1,8 @@
 const nodemailer = require('nodemailer');
-const Server = require('./index');
+//const Server = require('./index');
 
 /* Testing */
-Server.on('ready', () => {
+//Server.on('ready', () => {
     for (let i = 0; i < 1; i++) {
         // Create reusable transporter object using the default SMTP transport
         const transporter = nodemailer.createTransport({
@@ -14,7 +14,7 @@ Server.on('ready', () => {
         // Setup email data with unicode symbols
         const mailOptions = {
             from: '"Fred Foo 👻" <foo@example.com>', // Sender address
-            to: 'ryan@rbruno.com, baz@example.com', // List of receivers
+            to: 'ryan@rbruno.com', // List of receivers
             subject: 'Hello ' + i, // Subject line
             text: 'Hello world?', // Plain text body
             html: '<b>Hello world?</b>' // Html body
@@ -28,4 +28,4 @@ Server.on('ready', () => {
             // Console.log('Message sent: %s', info.messageId);
         });
     }
-});
+//});
