@@ -1,4 +1,4 @@
-const Storage = require('./storage');
+const Storage = require('./database');
 
 module.exports = (mail, config) => {
     // TODO Spam filter

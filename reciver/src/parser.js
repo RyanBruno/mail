@@ -1,5 +1,5 @@
 const Sender = require('./sender');
-const Storage = require('./storage');
+const Storage = require('./database');
 
 module.exports.parse = (buffer, config, callback) => {
     /* Parse and validate mail headers */

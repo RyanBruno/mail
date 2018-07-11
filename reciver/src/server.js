@@ -1,8 +1,8 @@
 const net = require('net');
-const fs = require('fs');
 const EventHandler = require('events');
 const Parser = require('./parser');
 const Handler = require('./handler');
+const Logger = require('./logger').logger;
 
 class Server extends EventHandler {
     /*
@@ -14,9 +14,7 @@ class Server extends EventHandler {
         this.config = config;
 
         /* Start the server */
-        fs.mkdir(this.config.mailDir, () => {
-            this.listen();
-        });
+        this.listen();
     }
 
     /**
@@ -57,7 +55,7 @@ class Server extends EventHandler {
         });
 
         server.listen(this.config.port || 25, () => {
-            console.log(Date.now() + ' Server bound to port: ' + this.config.port);
+            Logger.info('Server bound to port: ' + this.config.port);
             this.emit('ready');
         });
     }

@@ -1,7 +1,7 @@
 {
   "name": "smtp",
   "version": "0.1.0",
-  "description": "The SMTP Frontend to the MTA",
+  "description": "A MTA",
   "main": "index.js",
   "scripts": {
     "test": "xo",
@@ -23,5 +23,9 @@
   "xo": {
     "space": 4
   },
-  "dependencies": {}
+  "dependencies": {
+    "mongodb": "^3.1.1",
+    "winston": "^3.0.0",
+    "xo": "^0.21.1"
+  }
 }

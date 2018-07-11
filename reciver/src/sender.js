@@ -4,7 +4,7 @@ const dns = require('dns');
 module.exports.send = mail => {
     dns.resolveMx(mail.domain, (err, addresses) => {
         if (err) {
-            // TODO Return to sender
+            returnToSender(mail, 'Failed to resolve ' + mail.domain);
             console.log(Date.now() + ' Failed to resolve ' + mail.domain + ' for mail ' + mail.messageID);
             return;
         }
@@ -18,7 +18,7 @@ module.exports.send = mail => {
         client.on('data', data => {
             data = data.toString();
             if (!(data.startsWith('2') || data.startsWith('3'))) {
-                // TODO Return to sender
+                returnToSender(mail, 'Failed to forward mail to ' + mail.domain);
                 client.write('QUIT\r\n');
                 return;
             }
@@ -47,3 +47,7 @@ module.exports.send = mail => {
         });
     });
 };
+
+function returnToSender() {
+    // TODO
+}

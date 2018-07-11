@@ -2,7 +2,7 @@ const spamFilter = require('./src/spam-filter');
 const Server = require('./src/server');
 
 module.exports = new Server({
-    port: 25,
+    port: 25565,
     FQDN: 'smtp.rbruno.com',
     domain: ['rbruno.com'],
     mailbox: ['ryan'],
@@ -11,5 +11,8 @@ module.exports = new Server({
     maxText: 1000,
     maxMessage: 64000,
     maxRecipients: 100,
-    spamFilter
+    spamFilter,
+    database: {
+        url: 'mongodb://localhost:27017/mail'
+    }
 });

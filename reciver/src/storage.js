@@ -16,7 +16,7 @@ module.exports.store = (mail, config) => {
 };
 
 function save(mail, mailDir) {
-    const file = mailDir + '/' + mail.messageID + '.email';
+    const file = mailDir + '/' + Date.now() + '.email';
     fs.access(file, fs.constants.F_OK, err => {
         if (err) {
             fs.writeFile(file, JSON.stringify(mail), err => {
