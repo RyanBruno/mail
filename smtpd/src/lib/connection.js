@@ -13,7 +13,7 @@ class Connection extends EventEmitter {
 
     data(data) {
         if (this.mailData) {
-            if (data.trim() === '.') {
+            if (data === '.') {
                 /* Check message length */
                 if (this.mailData.join().length >= this.maxMessage) {
                     this.emit('reply', '552 Too much mail data');
@@ -45,7 +45,7 @@ class Connection extends EventEmitter {
         }
 
         if (command === 'EHLO' || command === 'HELO') {
-            if (command.length === data.trim().length) {
+            if (command.length === data.length) {
                 this.emit('reply', '504 Command parameter not implemented');
             } else {
                 this.session = new Session({maxRecipients: this.maxRecipients});
@@ -80,7 +80,7 @@ class Connection extends EventEmitter {
     }
 
     getCommand(data) {
-        data = data.trim().split(' ')[0].toUpperCase();
+        data = data.split(' ')[0].toUpperCase();
         const commands = ['EHLO', 'HELO', 'MAIL', 'RCPT', 'DATA', 'RSET', 'NOOP', 'QUIT', 'VRFY'];
         if (!commands.includes(data)) {
             return null;

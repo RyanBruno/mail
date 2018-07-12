@@ -21,7 +21,7 @@ module.exports.handle = (client, config, callback) => {
         /* Splits data and send them to the lib */
         data = data.trim().split('\r\n');
         data.forEach(line => {
-            connection.data(line);
+            connection.data(line.trim());
         });
     });
 };

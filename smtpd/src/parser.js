@@ -1,6 +1,5 @@
-const Sender = require('./sender');
-const Storage = require('./database');
 const Logger = require('./logger');
+const {sendToQueue, sendToStore} = require('./api');
 
 module.exports.parse = (buffer, config, callback) => {
     /* Parse and validate mail headers */
@@ -25,9 +24,9 @@ module.exports.parse = (buffer, config, callback) => {
         return false;
     });
 
-    /* If there is any local mail send to spam filter */
+    /* If there is any local mail send to store */
     if (save.to.length > 0) {
-        Storage.store(save, config);
+        sendToStore(mail);
     }
 
     /* Get a list of all to hosts */
@@ -47,8 +46,7 @@ module.exports.parse = (buffer, config, callback) => {
             }
             return false;
         });
-
-        Sender.send(newMail, config);
+        sendToQueue(mail);
     });
 };
 

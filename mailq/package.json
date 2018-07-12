@@ -1,0 +1,19 @@
+{
+  "name": "mailq",
+  "version": "0.1.0",
+  "description": "Mail queue",
+  "main": "index.js",
+  "scripts": {
+    "test": "xo"
+  },
+  "author": "RyanBruno",
+  "license": "ISC",
+  "xo": {
+    "space": 4
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "mongodb": "^3.1.1",
+    "xo": "^0.21.1"
+  }
+}
