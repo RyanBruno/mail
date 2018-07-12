@@ -1,0 +1,22 @@
+version: '3'
+services:
+  smtpd:
+    build: ./smtpd
+    ports:
+      - "25565:25565"
+    deploy:
+      replicas: 1
+    environment:
+      MAIL_Q: mailq
+  mailq:
+    build: ./mailq
+    deploy:
+      replicas: 1
+    environment:
+      DATABASE: mongo
+
+  mongo:
+    image: mongo
+    deploy:
+      replicas: 1
+

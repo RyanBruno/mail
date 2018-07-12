@@ -5,7 +5,7 @@ module.exports.sendToQueue = mail => {
     const postData = JSON.stringify(mail);
 
     const options = {
-        hostname: 'localhost',
+        hostname: process.env.MAIL_Q,
         port: 3000,
         path: '/mail',
         method: 'POST',

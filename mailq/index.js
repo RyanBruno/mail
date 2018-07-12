@@ -4,7 +4,7 @@ const {MongoClient} = require('mongodb');
 const app = express();
 
 /* Connect to db */
-MongoClient.connect('mongodb://localhost:27017/queue', {useNewUrlParser: true}, (err, client) => {
+MongoClient.connect('mongodb://' + process.env.DATABASE + ':27017/queue', {useNewUrlParser: true}, (err, client) => {
     if (err) {
         throw err;
     }
