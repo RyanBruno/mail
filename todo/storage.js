@@ -1,4 +1,5 @@
 const fs = require('fs');
+const Logger = require('logger').logger;
 
 module.exports.store = (mail, config) => {
     const mailDir = config.mailDir.endsWith('/') ? config.mailDir : config.mailDir + '/';
@@ -23,7 +24,7 @@ function save(mail, mailDir) {
                 if (err) {
                     console.error(Date.now() + ' ' + err);
                 }
-                console.log(Date.now() + ' Stored (' + mail.messageID + ') in file ' + file);
+                Logger.info('Stored (' + mail.messageID + ') in file ' + file);
             });
         } else {
             console.error(Date.now() + ' Mail (' + mail.messageID + ') already exists');

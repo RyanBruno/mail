@@ -1,4 +1,5 @@
 const Connection = require('./lib/connection');
+const Logger = require('./logger');
 
 module.exports.handle = (client, config, callback) => {
     const connection = new Connection(config);

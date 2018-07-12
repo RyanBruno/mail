@@ -1,4 +1,4 @@
-Trting out event driven, microservice model.
+Trying out event driven, microservice model.
 ```
 /------------------\        /------------------\
 | Mail Reciver     |><><><><| Recived DB       |

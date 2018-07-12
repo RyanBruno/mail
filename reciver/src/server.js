@@ -2,7 +2,7 @@ const net = require('net');
 const EventHandler = require('events');
 const Parser = require('./parser');
 const Handler = require('./handler');
-const Logger = require('./logger').logger;
+const Logger = require('./logger');
 
 class Server extends EventHandler {
     /*
@@ -27,6 +27,7 @@ class Server extends EventHandler {
 
             /* Send service ready response */
             client.write('220 ' + this.config.FQDN + ' Service ready\r\n');
+            Logger.info('New connection from: ' + client.remoteAddress);
 
             /* Handles the client */
             Handler.handle(client, this.config, buffer => {
@@ -50,7 +51,7 @@ class Server extends EventHandler {
         });
 
         server.on('error', err => {
-            console.error(Date.now() + ' An error has occured with the server socket');
+            Logger.error('An error has occured with the server socket');
             throw err;
         });
 

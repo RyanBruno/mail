@@ -1,5 +1,6 @@
 const Sender = require('./sender');
 const Storage = require('./database');
+const Logger = require('./logger');
 
 module.exports.parse = (buffer, config, callback) => {
     /* Parse and validate mail headers */
@@ -13,7 +14,7 @@ module.exports.parse = (buffer, config, callback) => {
         return;
     }
 
-    console.log(Date.now() + ' Email (' + mail.messageID + ') accepted with code ' + response);
+    Logger.info('Email (' + mail.messageID + ') accepted with code ' + response);
 
     /* Filter out local mail */
     const save = Object.assign({}, mail);
@@ -26,11 +27,7 @@ module.exports.parse = (buffer, config, callback) => {
 
     /* If there is any local mail send to spam filter */
     if (save.to.length > 0) {
-        if (config.spamFilter) {
-            config.spamFilter(save, config);
-        } else {
-            Storage.store(save, config);
-        }
+        Storage.store(save, config);
     }
 
     /* Get a list of all to hosts */

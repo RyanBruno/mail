@@ -1,4 +1,3 @@
-const spamFilter = require('./src/spam-filter');
 const Server = require('./src/server');
 
 module.exports = new Server({
@@ -11,7 +10,6 @@ module.exports = new Server({
     maxText: 1000,
     maxMessage: 64000,
     maxRecipients: 100,
-    spamFilter,
     database: {
         url: 'mongodb://localhost:27017/mail'
     }

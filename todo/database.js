@@ -1,4 +1,5 @@
 const {MongoClient} = require('mongodb');
+const Logger = require('./logger').logger;
 
 let db = null;
 
@@ -11,7 +12,7 @@ module.exports.store = (mail, config) => {
             if (err) {
                 throw err;
             }
-            console.log(Date.now() + ' Connected database');
+            (Date.now() + ' Connected database');
 
             db = client;
 

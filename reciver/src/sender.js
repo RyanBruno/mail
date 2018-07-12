@@ -1,11 +1,12 @@
 const net = require('net');
 const dns = require('dns');
+const Logger = require('./logger');
 
 module.exports.send = mail => {
     dns.resolveMx(mail.domain, (err, addresses) => {
         if (err) {
             returnToSender(mail, 'Failed to resolve ' + mail.domain);
-            console.log(Date.now() + ' Failed to resolve ' + mail.domain + ' for mail ' + mail.messageID);
+            Logger.warn('Failed to resolve ' + mail.domain + ' for mail ' + mail.messageID);
             return;
         }
         const fqdn = addresses[0].exchange;
@@ -38,12 +39,13 @@ module.exports.send = mail => {
                     client.write('.\r\n');
                 }
             } else {
-                console.log(Date.now() + ' Mail (' + mail.messageID + ') forwarded to ' + fqdn);
+                Logger.info(Date.now() + ' Mail (' + mail.messageID + ') forwarded to ' + fqdn);
             }
         });
 
         client.on('close', () => {
-            console.log('Connection closed');
+            // TODO
+            Logger.debug('Connection closed');
         });
     });
 };
